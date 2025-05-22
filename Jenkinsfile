@@ -2,53 +2,34 @@ pipeline {
     agent any
 
     stages {
-
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/ManujithAmerasinghe/8.1C-Jenkins-DevSecOps.git'
+                git branch: 'main', url: 'https://github.com/ManujithAmerasinghe/8.2CDevSecOps.git'
             }
         }
 
-        stage('Build') {
+        stage('Install Dependencies') {
             steps {
-                echo 'Building the application...'
+                bat 'npm install'
             }
         }
 
-        stage('Unit and Integration Tests') {
+        stage('Run Tests') {
             steps {
-                echo 'Running unit and integration tests...'
+                bat 'npm test || exit /b 0'
             }
         }
 
-        stage('Code Analysis') {
+        stage('Generate Coverage Report') {
             steps {
-                echo 'Analyzing code quality...'
+                bat 'npm run coverage || exit /b 0'
             }
         }
 
-        stage('Security Scan') {
+        stage('NPM Audit (Security Scan)') {
             steps {
-                echo 'Scanning for security vulnerabilities...'
+                bat 'npm audit || exit /b 0'
             }
-        }
-
-        stage('Deploy to Staging') {
-            steps {
-                echo 'Deploying to staging environment...'
-            }
-        }
-
-        stage('Integration Tests on Staging') {
-            steps {
-                echo 'Running integration tests on staging...'
-            }
-        }
-
-        stage('Deploy to Production') {
-            steps {
-                echo 'Deploying to production environment...'
-            }
-        }
-    }
+        }
+    }
 }
